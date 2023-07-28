@@ -1,37 +1,78 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Trello Power-Up: Send Email</title>
+  <title>Trello Power-Up: Send Email</title>
 </head>
-
 <body>
-    <button id="sendEmailBtn">Send Email</button>
+  <button id="sendEmailBtn">Send Email</button>
 
-    <!-- Trello Power-Up Library -->
-    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <!-- Trello Power-Up Library -->
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
 
-    <script>
-        // Callback function to be called when the 'Send Email' button is clicked
-        function onSendEmailButtonClick(t) {
-            // Replace the following code with your email sending logic
-            // For example, you can use a third-party library to send an email or trigger an API request to your email service.
-            console.log("Sending email...");
+  <script>
+    // Callback function to be called when the 'Send Email' button is clicked
+    function onSendEmailButtonClick(t) {
+      // Get the current card's ID
+      const cardId = t.getContext().card;
 
-        }
+      // Use t.card method to get the card's details
+      t.card('name', 'desc')
+        .then(function(card) {
+          const cardName = card.name;
+          const cardDescription = card.desc;
 
-        // Trello Power-Up Initialization
-        window.TrelloPowerUp.initialize({
-            'card-buttons': function (t, options) {
-                return [{
-                    // Button properties
-                    text: 'Send Email',
-                    callback: onSendEmailButtonClick,
-                    condition: 'always', // This specifies the button should always be shown.
-                }];
+          // Replace the following code with your email sending logic
+          console.log("Card Name: ", cardName);
+          console.log("Card Description: ", cardDescription);
+
+          // POST request data
+          const postData = {
+            description: cardDescription
+            // Add more data if required
+          };
+
+          // Make a POST request using the fetch API
+          fetch('https://growth-automation.flowforge.cloud/send-email1', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
             },
+            body: JSON.stringify(postData),
+          })
+          .then(function(response) {
+            if (response.ok) {
+              // Show a success notification
+              t.alert({
+                message: 'Email sent successfully!',
+                display: 'success'
+              });
+            } else {
+              console.error('POST request failed:', response.statusText);
+              // Handle the error if necessary
+            }
+          })
+          .catch(function(err) {
+            console.error('Error making POST request:', err);
+            // Handle the error if necessary
+          });
+        })
+        .catch(function(err) {
+          console.error('Error fetching card details:', err);
+          // Handle the error if necessary
         });
-    </script>
-</body>
+    }
 
+    // Trello Power-Up Initialization
+    window.TrelloPowerUp.initialize({
+      'card-buttons': function (t, options) {
+        return [{
+          // Button properties
+          text: 'Send Email',
+          callback: onSendEmailButtonClick,
+          condition: 'always', // This specifies the button should always be shown.
+        }];
+      },
+    });
+  </script>
+</body>
 </html>
