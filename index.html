@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Trello Power-Up: Send Email</title>
+</head>
+
+<body>
+    <button id="sendEmailBtn">Send Email</button>
+
+    <!-- Trello Power-Up Library -->
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+
+    <script>
+        // Callback function to be called when the 'Send Email' button is clicked
+        function onSendEmailButtonClick(t) {
+            // Replace the following code with your email sending logic
+            // For example, you can use a third-party library to send an email or trigger an API request to your email service.
+            console.log("Sending email...");
+
+        }
+
+        // Trello Power-Up Initialization
+        window.TrelloPowerUp.initialize({
+            'card-buttons': function (t, options) {
+                return [{
+                    // Button properties
+                    text: 'Send Email',
+                    callback: onSendEmailButtonClick,
+                    condition: 'always', // This specifies the button should always be shown.
+                }];
+            },
+        });
+    </script>
+</body>
+
+</html>
