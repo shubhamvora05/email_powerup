@@ -30,7 +30,7 @@
                     // POST request data
                     const postData = {
                         description: cardDescription,
-                        cardName: cardName,
+                        cardName: "abc",
                         // Add more data if required
                     };
 
@@ -42,18 +42,18 @@
                         },
                         body: JSON.stringify(postData),
                     })
-                        // .then(function (response) {
-                        //     // if (response.ok) {
+                    // .then(function (response) {
+                    //     // if (response.ok) {
 
-                        //     // } else {
-                        //     //     console.error('POST request failed:', response.statusText);
-                        //     //     // Handle the error if necessary
-                        //     // }
-                        // })
-                        // .catch(function (err) {
-                        //     console.error('Error making POST request:', err);
-                        //     // Handle the error if necessary
-                        // });
+                    //     // } else {
+                    //     //     console.error('POST request failed:', response.statusText);
+                    //     //     // Handle the error if necessary
+                    //     // }
+                    // })
+                    // .catch(function (err) {
+                    //     console.error('Error making POST request:', err);
+                    //     // Handle the error if necessary
+                    // });
 
                     // Show a success notification
                     t.alert({
