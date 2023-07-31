@@ -1,78 +1,108 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Trello Power-Up: Send Email</title>
+    <title>Trello Power-Up: Send Email</title>
 </head>
+
 <body>
-  <button id="sendEmailBtn">Send Email</button>
+    <button id="sendEmailBtn">Send Email</button>
 
-  <!-- Trello Power-Up Library -->
-  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <!-- Trello Power-Up Library -->
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
 
-  <script>
-    // Callback function to be called when the 'Send Email' button is clicked
-    function onSendEmailButtonClick(t) {
-      // Get the current card's ID
-      const cardId = t.getContext().card;
+    <script>
+        // Callback function to be called when the 'Send Email' button is clicked
+        function onSendEmailButtonClick(t) {
+            // Get the current card's ID
+            const cardId = t.getContext().card;
 
-      // Use t.card method to get the card's details
-      t.card('name', 'desc')
-        .then(function(card) {
-          const cardName = card.name;
-          const cardDescription = card.desc;
+            // Use t.card method to get the card's details
+            t.card('name', 'desc')
+                .then(function (card) {
+                    const cardName = card.name;
+                    const cardDescription = card.desc;
 
-          // Replace the following code with your email sending logic
-          console.log("Card Name: ", cardName);
-          console.log("Card Description: ", cardDescription);
+                    // Replace the following code with your email sending logic
+                    console.log("Card Name: ", cardName);
+                    console.log("Card Description: ", cardDescription);
 
-          // POST request data
-          const postData = {
-            description: cardDescription
-            // Add more data if required
-          };
+                    // POST request data
+                    const postData = {
+                        name: cardName,
+                        description: cardDescription
+                        // Add more data if required
+                    };
 
-          // Make a POST request using the fetch API
-          fetch('https://growth-automation.flowforge.cloud/send-email1', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
+                    // Make a POST request using the fetch API
+                    fetch('https://growth-automation.flowforge.cloud/send-email1', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(postData),
+                    })
+                        // .then(function (response) {
+                        //     // if (response.ok) {
+
+                        //     // } else {
+                        //     //     console.error('POST request failed:', response.statusText);
+                        //     //     // Handle the error if necessary
+                        //     // }
+                        // })
+                        // .catch(function (err) {
+                        //     console.error('Error making POST request:', err);
+                        //     // Handle the error if necessary
+                        // });
+
+                    // Show a success notification
+                    t.alert({
+                        message: 'Powering-Up, give us a second...'
+                    });
+
+                    // Add custom message in the activity section
+                    t.comment(`First email sent successfully.`);
+
+
+                    // Move the card to another list (you can change 'listId' with your desired destination list ID)
+                    t.card('idList')
+                        .then(function (cardData) {
+                            const currentListId = cardData.idList;
+                            const destinationListId = '64b94aedf71e857e85ae93c5'; // Replace 'listId' with the ID of the destination list
+                            if (currentListId !== destinationListId) {
+                                t.moveCardToList(destinationListId)
+                                    .then(function () {
+                                        console.log('Card moved to the destination list.');
+                                    })
+                                    .catch(function (err) {
+                                        console.error('Error moving card to the destination list:', err);
+                                        // Handle the error if necessary
+                                    });
+                            }
+                        })
+                        .catch(function (err) {
+                            console.error('Error fetching card data:', err);
+                            // Handle the error if necessary
+                        });
+                })
+                .catch(function (err) {
+                    console.error('Error fetching card details:', err);
+                    // Handle the error if necessary
+                });
+        }
+
+        // Trello Power-Up Initialization
+        window.TrelloPowerUp.initialize({
+            'card-buttons': function (t, options) {
+                return [{
+                    // Button properties
+                    text: 'Send Email',
+                    callback: onSendEmailButtonClick,
+                    condition: 'always', // This specifies the button should always be shown.
+                }];
             },
-            body: JSON.stringify(postData),
-          })
-          .then(function(response) {
-            if (response.ok) {
-              // Show a success notification
-              t.alert({
-                message: 'Email sent successfully!',
-                display: 'success'
-              });
-            } else {
-              console.error('POST request failed:', response.statusText);
-              // Handle the error if necessary
-            }
-          })
-          .catch(function(err) {
-            console.error('Error making POST request:', err);
-            // Handle the error if necessary
-          });
-        })
-        .catch(function(err) {
-          console.error('Error fetching card details:', err);
-          // Handle the error if necessary
         });
-    }
-
-    // Trello Power-Up Initialization
-    window.TrelloPowerUp.initialize({
-      'card-buttons': function (t, options) {
-        return [{
-          // Button properties
-          text: 'Send Email',
-          callback: onSendEmailButtonClick,
-          condition: 'always', // This specifies the button should always be shown.
-        }];
-      },
-    });
-  </script>
+    </script>
 </body>
+
 </html>
